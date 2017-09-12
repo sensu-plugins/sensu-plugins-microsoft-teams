@@ -14,7 +14,7 @@
 require 'sensu-handler'
 require 'json'
 
-class SLack < Sendsu::Handler
+class MicrosoftTeams < Sensu::Handler
   option :json_config,
          description: 'Configuration name',
          short: '-j JSONCONFIG',
