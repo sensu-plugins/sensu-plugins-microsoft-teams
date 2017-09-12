@@ -22,7 +22,7 @@ class MicrosoftTeams < Sensu::Handler
          default: 'microsoft-teams'
 
   def microsoft_teams_webhook_url
-    get_setting('webhook_url')
+    get_setting('teams_url')
   end
 
   def proxy_address
