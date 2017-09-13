@@ -45,47 +45,20 @@ class MicrosoftTeams < Sensu::Handler
     get_setting('dashboard')
   end
 
-  def incident_key
-    if dashboard_uri.nil?
-      @event['client']['name'] + '/' + @event['check']['name']
-    else
-      "<#{dashboard_uri}#{@event['client']['name']}?check=#{@event['check']['name']}|#{@event['client']['name']}/#{@event['check']['name']}>"
-    end
-  end
-
   def get_setting(name)
     settings[config[:json_config]][name]
   end
 
   def handle
-    description = @event['check']['notification']
-    post_data("#{incident_key}: #{description}")
-  end
-
-  def post_data(body)
     uri = URI(microsoft_teams_webhook_url)
-    http = if proxy_address.nil?
-             Net::HTTP.new(uri.host, uri.port)
-           else
-             Net::HTTP::Proxy(proxy.address, proxy_port, proxy_username, proxy_password).new(uri.host, uri.port)
-           end
+    http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
-
-    req = Net::HTTP::Post.new("#{uri.path}?#{uri.query}", 'Content-Type' => 'application/json')
-
-    payload = {
-      "@type" => "MessageCard",
-      "@context" => "http://schema.org/extensions",
-      "themeColor" => color,
-      "title" => "#{@event['client']['address']} - #{translate_status}",
-      "summary" => "#{@event['client']['address']} - #{translate_status}",
-      "sections" => [ { "text" => "Hello World" } ] 
-    }
-
-    req.body = payload.to_json
-
+    req = Net::HTTP::Post.new("{uri.path}?#{uri.query}", 'Content-Type' => 'application/json')
+    text = '{"text": "Hello World from Sensu"}'
+    req.body = JSON.parse(text)
+    
     response = http.request(req)
-    verify_response(response)
+    verifiy_response(response)
   end
 
   def verify_response(response)
