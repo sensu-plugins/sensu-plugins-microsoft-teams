@@ -6,13 +6,15 @@
 # for details.
 #
 # In order to use this plugin, you must first configure an incoming webhook
-# integration in Microsoft Teams. You can create the required webhook by visiting 
-# https://outlook.office.com/connectors/publish
+# integration in Microsoft Teams. You can create the required webhook by
+# visiting
+# https://docs.microsoft.com/en-us/outlook/actionable-messages/actionable-messages-via-connectors#sending-actionable-messages-via-office-365-connectors
 #
-# After you configure your webhook, you'll need the webhook URL from the connector.
+# After you configure your webhook, you'll need the webhook URL from the integration.
 
 require 'sensu-handler'
 require 'json'
+require 'erubis'
 
 class MicrosoftTeams < Sensu::Handler
   option :json_config,
@@ -21,8 +23,48 @@ class MicrosoftTeams < Sensu::Handler
          long: '--json JSONCONFIG',
          default: 'microsoft-teams'
 
-  def microsoft_teams_webhook_url
-    get_setting('teams_url')
+  def payload_template
+    get_setting('payload_template')
+  end
+
+  def teams_webhook_url
+    get_setting('webhook_url')
+  end
+
+  def teams_icon_emoji
+    get_setting('icon_emoji')
+  end
+
+  def teams_icon_url
+    get_setting('icon_url')
+  end
+
+  def teams_channel
+    @event['client']['teams_channel'] || @event['check']['teams_channel'] || get_setting('channel')
+  end
+
+  def teams_message_prefix
+    get_setting('message_prefix')
+  end
+
+  def teams_bot_name
+    get_setting('bot_name')
+  end
+
+  def teams_surround
+    get_setting('surround')
+  end
+
+  def teams_link_names
+    get_setting('link_names')
+  end
+
+  def message_template
+    get_setting('template') || get_setting('message_template')
+  end
+
+  def fields
+    get_setting('fields')
   end
 
   def proxy_address
@@ -45,20 +87,71 @@ class MicrosoftTeams < Sensu::Handler
     get_setting('dashboard')
   end
 
+  def incident_key
+    if dashboard_uri.nil?
+      @event['client']['name'] + '/' + @event['check']['name']
+    else
+      "<#{dashboard_uri}#{@event['client']['name']}?check=#{@event['check']['name']}|#{@event['client']['name']}/#{@event['check']['name']}>"
+    end
+  end
+
   def get_setting(name)
     settings[config[:json_config]][name]
   end
 
   def handle
-    uri = URI(microsoft_teams_webhook_url)
-    http = Net::HTTP.new(uri.host, uri.port)
+    if payload_template.nil?
+      description = @event['check']['notification'] || build_description
+      post_data("#{incident_key}: #{description}")
+    else
+      post_data(render_payload_template(teams_channel))
+    end
+  end
+
+  def render_payload_template(channel)
+    return unless payload_template && File.readable?(payload_template)
+    template = File.read(payload_template)
+    eruby = Erubis::Eruby.new(template)
+    eruby.result(binding)
+  end
+
+  def build_description
+    template = if message_template && File.readable?(message_template)
+                 File.read(message_template)
+               else
+                 '''<%=
+                 [
+                   @event["check"]["output"].gsub(\'"\', \'\\"\'),
+                   @event["client"]["address"],
+                   @event["client"]["subscriptions"].join(",")
+                 ].join(" : ")
+                 %>
+                 '''
+               end
+    eruby = Erubis::Eruby.new(template)
+    eruby.result(binding)
+  end
+
+  def post_data(body)
+    uri = URI(teams_webhook_url)
+    http = if proxy_address.nil?
+             Net::HTTP.new(uri.host, uri.port)
+           else
+             Net::HTTP::Proxy(proxy_address, proxy_port, proxy_username, proxy_password).new(uri.host, uri.port)
+           end
     http.use_ssl = true
-    req = Net::HTTP::Post.new("{uri.path}?#{uri.query}", 'Content-Type' => 'application/json')
-    text = '{"text": "Hello World from Sensu"}'
-    req.body = JSON.parse(text)
-    
+
+    req = Net::HTTP::Post.new("#{uri.path}?#{uri.query}", 'Content-Type' => 'application/json')
+
+    if payload_template.nil?
+      text = teams_surround ? teams_surround + body + teams_surround : body
+      req.body = payload(text).to_json
+    else
+      req.body = body
+    end
+
     response = http.request(req)
-    verifiy_response(response)
+    verify_response(response)
   end
 
   def verify_response(response)
@@ -67,6 +160,38 @@ class MicrosoftTeams < Sensu::Handler
       true
     else
       raise response.error!
+    end
+  end
+
+  def payload(notice)
+    client_fields = []
+
+    unless fields.nil?
+      fields.each do |field|
+        # arbritary based on what I feel like
+        # -vjanelle
+        is_short = true unless @event['client'].key?(field) && @event['client'][field].length > 50
+        client_fields << {
+          title: field,
+          value: @event['client'][field],
+          short: is_short
+        }
+      end
+    end
+
+    {
+      icon_url: teams_icon_url ? teams_icon_url : 'https://raw.githubusercontent.com/sensu/sensu-logo/master/sensu1_flat%20white%20bg_png.png',
+      attachments: [{
+        title: "#{@event['client']['address']} - #{translate_status}",
+        text: [teams_message_prefix, notice].compact.join(' '),
+        color: color,
+        fields: client_fields
+      }]
+    }.tap do |payload|
+      payload[:channel] = teams_channel if teams_channel
+      payload[:username] = teams_bot_name if teams_bot_name
+      payload[:icon_emoji] = teams_icon_emoji if teams_icon_emoji
+      payload[:link_names] = teams_link_names if teams_link_names
     end
   end
 
@@ -93,4 +218,4 @@ class MicrosoftTeams < Sensu::Handler
     }
     status[check_status.to_i]
   end
-end 
+end
