@@ -181,10 +181,10 @@ class MicrosoftTeams < Sensu::Handler
 
     {
       icon_url: teams_icon_url ? teams_icon_url : 'https://raw.githubusercontent.com/sensu/sensu-logo/master/sensu1_flat%20white%20bg_png.png',
-      attachments: [{
-        title: "#{@event['client']['address']} - #{translate_status}",
+      themeColor: color,
+      text: "#{@event['client']['address']} - #{translate_status}",
+      sections: [{
         text: [teams_message_prefix, notice].compact.join(' '),
-        color: color,
         fields: client_fields
       }]
     }.tap do |payload|
