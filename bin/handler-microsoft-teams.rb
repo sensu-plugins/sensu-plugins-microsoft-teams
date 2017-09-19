@@ -180,10 +180,10 @@ class MicrosoftTeams < Sensu::Handler
     end
 
     {
-      icon_url: teams_icon_url ? teams_icon_url : 'https://raw.githubusercontent.com/sensu/sensu-logo/master/sensu1_flat%20white%20bg_png.png',
       themeColor: color,
       text: "#{@event['client']['address']} - #{translate_status}",
       sections: [{
+        activityImage: teams_icon_url ? teams_icon_url : 'https://raw.githubusercontent.com/sensu/sensu-logo/master/sensu1_flat%20white%20bg_png.png',
         text: [teams_message_prefix, notice].compact.join(' '),
         fields: client_fields
       }]
