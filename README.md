@@ -7,6 +7,9 @@
 [![Dependency Status](https://gemnasium.com/sensu-plugins/sensu-plugins-microsoft-teams.svg)](https://gemnasium.com/sensu-plugins/sensu-plugins-microsoft-teams)
 
 
+## Screenshot
+![Microsoft Teams Handler](screenshot.png)
+
 ## Functionality
 
 ## Files
