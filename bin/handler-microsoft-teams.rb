@@ -71,10 +71,6 @@ class MicrosoftTeams < Sensu::Handler
     get_setting('template') || get_setting('message_template')
   end
 
-  def fields
-    get_setting('fields')
-  end
-
   def proxy_address
     get_setting('proxy_address')
   end
@@ -172,28 +168,12 @@ class MicrosoftTeams < Sensu::Handler
   end
 
   def payload(notice)
-    client_fields = []
-
-    unless fields.nil?
-      fields.each do |field|
-        # arbritary based on what I feel like
-        # -vjanelle
-        is_short = true unless @event['client'].key?(field) && @event['client'][field].length > 50
-        client_fields << {
-          title: field,
-          value: @event['client'][field],
-          short: is_short
-        }
-      end
-    end
-
     {
       themeColor: color,
       text: "#{@event['client']['address']} - #{translate_status}",
       sections: [{
         activityImage: teams_icon_url ? teams_icon_url : 'https://raw.githubusercontent.com/sensu/sensu-logo/master/sensu1_flat%20white%20bg_png.png',
-        text: [teams_message_prefix, notice].compact.join(' '),
-        fields: client_fields
+        text: [teams_message_prefix, notice].compact.join(' ')
       }],
       potentialAction: [{
         '@type': teams_action_type ? teams_action_type : "OpenUri",
