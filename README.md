@@ -53,3 +53,4 @@
 [Installation and Setup](https://sensu-plugins.io/docs/installation_instructions.html)
 
 ## Notes
+[Actionable message card reference](https://docs.microsoft.com/en-us/outlook/actionable-messages/card-reference)
