@@ -59,6 +59,14 @@ class MicrosoftTeams < Sensu::Handler
     get_setting('link_names')
   end
 
+  def teams_action_type
+    get_setting('action_type')
+  end
+
+  def teams_action_name
+    get_setting('action_name')
+  end
+
   def message_template
     get_setting('template') || get_setting('message_template')
   end
@@ -91,7 +99,7 @@ class MicrosoftTeams < Sensu::Handler
     if dashboard_uri.nil?
       @event['client']['name'] + '/' + @event['check']['name']
     else
-      "<#{dashboard_uri}#{@event['client']['name']}?check=#{@event['check']['name']}|#{@event['client']['name']}/#{@event['check']['name']}>"
+      "#{dashboard_uri}#{@event['client']['name']}?check=#{@event['check']['name']}"
     end
   end
 
@@ -186,6 +194,14 @@ class MicrosoftTeams < Sensu::Handler
         activityImage: teams_icon_url ? teams_icon_url : 'https://raw.githubusercontent.com/sensu/sensu-logo/master/sensu1_flat%20white%20bg_png.png',
         text: [teams_message_prefix, notice].compact.join(' '),
         fields: client_fields
+      }],
+      potentialAction: [{
+        '@type': teams_action_type ? teams_action_type : "OpenUri",
+        name: teams_action_name ? teams_action_name : "View in Sensu",
+        targets: [{
+          os: "default",
+          uri: "#{incident_key}" 
+        }]
       }]
     }.tap do |payload|
       payload[:channel] = teams_channel if teams_channel
