@@ -7,11 +7,12 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ### Added
 - gitignore (@majormoses)
-- rubycop config (@majormoses)
+- rubocop config (@majormoses)
 
 ### Changed
 - update changelog guidelines location (@majormoses)
 - travis config for testing and deploment to rubygems (@majormoses)
+- handler-microsoft-teams.rb: appease the cops (@majormoses)
 
 ## [1.2.2]
 ### Changed

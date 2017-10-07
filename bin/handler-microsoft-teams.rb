@@ -123,14 +123,14 @@ class MicrosoftTeams < Sensu::Handler
     template = if message_template && File.readable?(message_template)
                  File.read(message_template)
                else
-                 '''<%=
+                 '<%=
                  [
                    @event["check"]["output"].gsub(\'"\', \'\\"\'),
                    @event["client"]["address"],
                    @event["client"]["subscriptions"].join(",")
                  ].join(" : ")
                  %>
-                 '''
+                 '
                end
     eruby = Erubis::Eruby.new(template)
     eruby.result(binding)
@@ -176,11 +176,11 @@ class MicrosoftTeams < Sensu::Handler
         text: [teams_message_prefix, notice].compact.join(' ')
       }],
       potentialAction: [{
-        '@type': teams_action_type ? teams_action_type : "OpenUri",
-        name: teams_action_name ? teams_action_name : "View in Sensu",
+        '@type' => teams_action_type ? teams_action_type : 'OpenUri',
+        name: teams_action_name ? teams_action_name : 'View in Sensu',
         targets: [{
-          os: "default",
-          uri: "#{incident_key}" 
+          os: 'default',
+          uri: incident_key.to_s
         }]
       }]
     }.tap do |payload|
