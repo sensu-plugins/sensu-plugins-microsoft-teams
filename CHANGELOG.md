@@ -5,6 +5,7 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
+## [1.3.0] - 2017-10-10
 ### Added
 - gitignore (@majormoses)
 - rubocop config (@majormoses)
@@ -62,6 +63,7 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 
 [Unreleased]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/v1.2.2...HEAD
+[1.3.0]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/v1.2.2...1.3.0
 [1.2.2]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/v1.1.0...v1.2.0
