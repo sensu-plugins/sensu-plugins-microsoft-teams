@@ -114,6 +114,7 @@ class MicrosoftTeams < Sensu::Handler
 
   def render_payload_template(channel)
     return unless payload_template && File.readable?(payload_template)
+
     template = File.read(payload_template)
     eruby = Erubis::Eruby.new(template)
     eruby.result(binding)
@@ -172,12 +173,12 @@ class MicrosoftTeams < Sensu::Handler
       themeColor: color,
       text: "#{@event['client']['address']} - #{translate_status}",
       sections: [{
-        activityImage: teams_icon_url ? teams_icon_url : 'https://raw.githubusercontent.com/sensu/sensu-logo/master/sensu1_flat%20white%20bg_png.png',
+        activityImage: teams_icon_url || 'https://raw.githubusercontent.com/sensu/sensu-logo/master/sensu1_flat%20white%20bg_png.png',
         text: [teams_message_prefix, notice].compact.join(' ')
       }],
       potentialAction: [{
-        '@type' => teams_action_type ? teams_action_type : 'OpenUri',
-        name: teams_action_name ? teams_action_name : 'View in Sensu',
+        '@type' => teams_action_type || 'OpenUri',
+        name: teams_action_name || 'View in Sensu',
         targets: [{
           os: 'default',
           uri: incident_key.to_s
