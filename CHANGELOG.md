@@ -5,6 +5,14 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
+## [1.4.0] - 2018-09-11
+### Added
+- Add erubis gem as a startup dependency
+
+### Changed
+- Updated CONTRIBUTING.md to point to new docs site
+- Updated README with better installation instructions
+
 ## [1.3.0] - 2017-10-10
 ### Added
 - gitignore (@majormoses)
