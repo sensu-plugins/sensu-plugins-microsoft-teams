@@ -53,7 +53,9 @@
 ```
 ## Installation
 
-[Installation and Setup](https://sensu-plugins.io/docs/installation_instructions.html)
+[Installation and Setup](https://docs.sensu.io/plugins/latest/installation/)
+
+To install the plugin, run `sensu-install -p microsoft-teams`.
 
 ## Notes
 [Actionable message card reference](https://docs.microsoft.com/en-us/outlook/actionable-messages/card-reference)
