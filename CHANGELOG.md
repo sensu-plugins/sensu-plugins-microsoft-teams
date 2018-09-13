@@ -5,12 +5,13 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
-### Added
-- Add erubis gem as a startup dependency
+## [1.3.1] - 2018-09-12
+### Fixed
+- Add erubis gem as a startup dependency (@asachs01)
 
 ### Changed
-- Updated CONTRIBUTING.md to point to new docs site
-- Updated README with better installation instructions
+- Updated CONTRIBUTING.md to point to new docs site (@asachs01)
+- Updated README with better installation instructions (@asachs01)
 
 ## [1.3.0] - 2017-10-10
 ### Added
@@ -69,7 +70,8 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 - updated references of `skel` to `microsoft-teams` (@tuxpower)
 
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/v1.2.2...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/1.3.1...HEAD
+[1.3.1]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/v1.2.2...1.3.0
 [1.2.2]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/v1.2.0...v1.2.1
