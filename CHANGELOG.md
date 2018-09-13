@@ -5,6 +5,20 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
+### Security
+- updated `yard` dependency to `~> 0.9.11` per: https://nvd.nist.gov/vuln/detail/CVE-2017-17042 which closes attacks against a yard server loading arbitrary files (@majormoses)
+- updated rubocop dependency to `~> 0.51.0` per: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-8418. (@majormoses)
+
+### Breaking Changes
+- removed ruby versions `< 2.3` support (@majormoses)
+- bumped `sensu-plugin` to `~> 2.7` which removes in handler event filtering you can read about it  [here](https://github.com/sensu-plugins/sensu-plugin/blob/master/CHANGELOG.md#v145---2017-03-07)(@majormoses)
+
+### Fixed
+- fix `handler-microsoft-teams.rb`: rescue any non sensu specification compliant status code passed to the microsoft-teams handler as the color matching `unknown` (@majormoses)
+
+### Changed
+- appeased the cops (@majormoses)
+
 ## [1.3.1] - 2018-09-12
 ### Fixed
 - Add erubis gem as a startup dependency (@asachs01)

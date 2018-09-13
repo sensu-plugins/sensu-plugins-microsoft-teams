@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SensuPluginsMicrosoftTeams
   module Version
     MAJOR = 1
