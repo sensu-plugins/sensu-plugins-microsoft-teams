@@ -5,6 +5,7 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
+## [2.0.0] - 2018-09-15
 ### Security
 - updated `yard` dependency to `~> 0.9.11` per: https://nvd.nist.gov/vuln/detail/CVE-2017-17042 which closes attacks against a yard server loading arbitrary files (@majormoses)
 - updated rubocop dependency to `~> 0.51.0` per: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-8418. (@majormoses)
@@ -84,7 +85,8 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 - updated references of `skel` to `microsoft-teams` (@tuxpower)
 
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/1.3.1...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/2.0.0...HEAD
+[2.0.0]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/1.3.1...2.0.0
 [1.3.1]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/v1.2.2...1.3.0
 [1.2.2]: https://github.com/sensu-plugins/sensu-plugins-microsoft-teams/compare/v1.2.1...v1.2.2
