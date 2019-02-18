@@ -30,7 +30,7 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.version                = SensuPluginsMicrosoftTeams::Version::VER_STRING
 
   s.add_runtime_dependency 'erubis', '~> 2.7'
-  s.add_runtime_dependency 'sensu-plugin', '~> 2.7'
+  s.add_runtime_dependency 'sensu-plugin', '>= 2.7', '< 5.0'
 
   s.add_development_dependency 'bundler',                   '~> 1.15'
   s.add_development_dependency 'github-markup',             '~> 3.0'
