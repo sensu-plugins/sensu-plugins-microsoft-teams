@@ -2,14 +2,10 @@ language: ruby
 cache:
 - bundler
 before_install:
-- gem install bundler -v 1.15
+- gem install bundler -v 2.0
 install:
 - bundle install
 rvm:
-- 2.0
-- 2.1
-- 2.2
-- 2.3.0
 - 2.4.1
 notifications:
   email:
@@ -21,8 +17,10 @@ script:
 - gem build sensu-plugins-microsoft-teams.gemspec
 - gem install sensu-plugins-microsoft-teams-*.gem
 - bundle exec rake default
+before_deploy:
+- bash -c "[ ! -d bonsai/ ] && git clone https://github.com/sensu/sensu-go-bonsai-asset.git bonsai || echo 'bonsai/ exists, skipping git clone'"
 deploy:
-  provider: rubygems
+- provider: rubygems
   api_key:
     secure: ld/He5yJQr2vlx3mMNPbrMLYizzBuuyuLS8zff+KV8YRCv9y94t82EeLA3V/GBAceZYUVgnk9aeL73p8up32nWnJlbPIZNdly9lPI4XqDPf0yUSPUOz6D54dki9NtPvz0al6zz1GBRuH9XhSuRFoWEfgTOrzcCneG++u23ZnaLwAEyBQ/vKnn8garfcA84ZPAA4lw3yjMfTZ3aNvU1ssbllKZQ8skcX3MtBK0ZEX50cShQKvGVTjb2YTNuJ31rj3jX1F2MF9BgLJs2odMhcRCrsBp4XG7Y/bYuvTHz0ygArPBlK4o0yFMjyExseGniCJk8dHpdja5Q44GWLhos70t7vz/nPe83SPtA9lB+TPt7hvVuJYhpJUGlt3/9HASaB34XieOPA745xhgdHlkJv5JUy2L+cbs1jux02gGcFHxL+9uAP+V+UtYpu7nOPS4j5xCh/qMItIby44ArmOhdRnCt/Bp7I9z+SpIjezL4B4JB76x7hGeBkEHjls171aIcSd6/88a4dLqLsw07SJ33+f4ONmf2RKQAXQPLWm6XzGHIXV9aB4Osao8vz41QVA48ejCClJO9/VN0fIZDp9d4IZZNcbYtcgi1j5hbN/1FjdbVnvf6qnXYqJ+QF5vHwnFTNkZauScRB1v6cMVqB9wTJeeqtIR7T46kHM1EP1+oNo6pU=
   gem: sensu-plugins-microsoft-teams
@@ -31,3 +29,10 @@ deploy:
     all_branches: true
     rvm: 2.4.1
     repo: sensu-plugins/sensu-plugins-microsoft-teams
+- provider: script
+  script: bonsai/ruby-runtime/travis-build-ruby-plugin-assets.sh sensu-plugins-microsoft-teams
+  skip_cleanup: true
+  on:
+    tags: true
+    all_branches: true
+    rvm: 2.4.1  
